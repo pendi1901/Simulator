@@ -14,10 +14,10 @@ def isBlankLine(line):
 
 def main():
 	prog_cnter = 0
-	mem_addr = 0
+	mem_addr = -1
 	hlt_count= 0
 
-	addr_and_pc = [ mem_addr, prog_cnter]
+	addr_and_pc = [ mem_addr, prog_cnter, hlt_count]
 	storeLabel = {}
 	storeVar = {}
 	machine_code = []

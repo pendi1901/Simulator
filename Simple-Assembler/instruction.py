@@ -8,10 +8,13 @@
 #addr_and_pc[1] -> pc
 
 
+<<<<<<< HEAD
 # def isRegister(instn):
 # 	#register validation and return boolean
 # 	#create register dict
 
+=======
+>>>>>>> 80e8e9c826bf983c89ce77cf6b21521320d74d48
 def isMem(instn):
 	#memory validation and return boolean
 
@@ -94,6 +97,12 @@ def instruction(instn, machine_code, addr_and_pc):
 	instn_type = { "A": ["add" , "sub" , "mul" , "xor" , "or" , "and" ],
 	"B" : ["movI" , "rs","ls"], "C" : ["movR", "div" ,"not" , "cmp"] , "D" : ["ld" , "st"],
 	"E" : ["jmp" , "jlp" , "jgt" , "je"] , "F" :["hlt"]}
+	if index == 0: 
+		instn[0] = "movI"
+	else:
+		instn[0] = "movR"
+
+	instn_type = { 'A': ["add","sub"], 'B': ["movI"], 'C': ["movR"] , so on}
 	for i in instn_type:
 		if instn[0] in instn_type["A"]:  typeA(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["B"]:  typeB(instn, machine_code, addr_and_pc)
