@@ -7,6 +7,9 @@ def read_from_file():
 
 def isInstruction(instn):
 	# intruction validation
+	opcode = ["add", "sub", "movI", "movR","ld", "st", "mul", "div",
+	"rs","ls","xor" ,"or" ,"and", "not","cmp", "jmp", "jlt", "jgt", "je"
+	, "hlt"]
 
 def isBlankLine(line):
 	#check for blank line and return boolean
@@ -22,6 +25,8 @@ def main():
 	storeVar = {}
 	machine_code = []
 
+	#add a case for the movI and the movR as well otherwise they'll
+	#come under errors 
 	f = read_from_file()
 	for each in f:
 		line = each.strip().split()

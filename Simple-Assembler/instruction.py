@@ -10,13 +10,23 @@
 
 def isMem(instn):
 	#memory validation and return boolean
+	if(instn<=256):
+		return True
+	else:
+		return False
 
 def isImm(instn):
 	#immediate validation and return boolean
+	if(instn<=256):
+		return True
+	else:
+		return False
 
 def isHalt(instn):
-	#halt instruction validation and return boolean
-
+	if(instn[0]== "hlt"):
+		return True
+	else : 
+		return False
 
 def get_opcode(command):
 	#create dict , format -> {instn: opcode}
@@ -28,45 +38,73 @@ def get_opcode(command):
 	"jlt" : "10000" , "jgt": "10001" , "je" : "10010" , "hlt" : "10011"}
 	return str(opcode[command])
 
-
+#complete the function!!
 def get_regAddr(reg1):
 	#create reg dict, format -> {reg: reg_Addr}
 	#return corresponding reg addr
 	regdict = {"R0" : "000" , "R1" : "001" , "R2" : "010" , "R3" : "011" , "R4" : "100",
 	"R5" : "101" , "R6" : "110" , "FLAGS" : "111"}
-
-
+	return str(regdict[reg1])
 
 #---IMPORTANT----
 #Return incremented mem_addr and machine code if respective validations are correct.
-
 def typeA(instn, machine_code, addr_and_pc):
 	# if get_regAddr(instn):
 	# 	#TRUE: call correponding function
 	# 	op = get_opcode(instn[0])
 	# 	redudant = "00"
-
 	# 	machine_code.append(op+redudant + )
 	# 	#FALSE: error
-	if(len(instn) == 4):
-		
+	a = get_regAddr(instn[1])
+	b = get_regAddr(instn[2])
+	c = get_regAddr(instn[3])
+	if(len(instn) != 4):
+		print("Error : Not Enough Arguments","At line number", addr_and_pc[1])
+	else:
+		op = get_opcode(instn[0])
+		redundant = "00"
+		machine_code.append(op + redundant + a + b + c )
+		addr_and_pc[0]+=1
+		addr_and_pc[1]+=1
 
 def typeB(instn, machine_code, addr_and_pc):
-	if isRegister(instn):
+	b = isImm(instn[2][1:])
+	if(len(instn)==3):
+		if(b == True):
+			a = get_regAddr(instn[1])
+			op = get_opcode(instn[0])
+			i = int(instn[2][1:])
+			binary = bin(i)[2:]
+			c = binary.zfill(8)
+			machine_code.append(op + a + c )
+			addr_and_pc[0]+=1
+			addr_and_pc[1]+=1
+		else : 
+			print("Error  : Given Number isn't a 8 bit value","At line number",addr_and_pc[1])
+	else:
+		print("Error : Not Enough Arguments","At line number",addr_and_pc[1] )
 
-	if isImm(instn):
-		#TRUE: call correponding function
-		#FALSE: error
+	#TRUE: call correponding function
+	#FALSE: error
 
 def typeC(instn, machine_code, addr_and_pc):
-	if isRegister(instn):
-		#TRUE: call correponding function
-		#FALSE: error
+	if(len(instn)==3):
+		a = get_regAddr(instn[1])
+		b = get_regAddr(instn[2])
+		op  =get_opcode(instn[0])
+		redundant = "00000"
+		machine_code.append(op+redundant+a+b)
+		addr_and_pc[0]+=1
+		addr_and_pc[1]+=1
+	else:
+		print("Error : Not Enough Arguments","At line number",addr_and_pc[1])
 
-def typeD(instn, machine_code, addr_and_pc):
-	if isRegister(instn):
+#complete this function
+def typeD(instn, machine_code, addr_and_pc, hlt_count):
+	if (len(instn ==3):
+		a = get_regAddr(instn[1])
+		op = get_opcode(instn[0])
 
-	if isMem(instn):
 		#TRUE: call correponding function
 		#FALSE: error
 
@@ -76,11 +114,16 @@ def typeE(instn, machine_code, addr_and_pc):
 		#FALSE: error
 
 def typeF(instn, machine_code, addr_and_pc):
-	if isHalt(instn):
+	a = isHalt(instn[0])
+	if(a == True ):
+		hlt_count+=1
+	else :
+		print("Error the command isn't halt")
+
 		#TRUE: call correponding function
 		#FALSE: error
 
-def instruction(instn, machine_code, addr_and_pc):
+def instruction(instn, machine_code, addr_and_pc,hlt_count):
 	#like A -> all type A instructions -> "add", "sub", "mul" etc.
 	index = instn[2].find('$')
 	if(index == 0):
@@ -90,16 +133,16 @@ def instruction(instn, machine_code, addr_and_pc):
 	instn_type = { "A": ["add" , "sub" , "mul" , "xor" , "or" , "and" ],
 	"B" : ["movI" , "rs","ls"], "C" : ["movR", "div" ,"not" , "cmp"] , "D" : ["ld" , "st"],
 	"E" : ["jmp" , "jlp" , "jgt" , "je"] , "F" :["hlt"]}
-	if index == 0: 
-		instn[0] = "movI"
-	else:
-		instn[0] = "movR"
-
-	instn_type = { 'A': ["add","sub"], 'B': ["movI"], 'C': ["movR"] , so on}
 	for i in instn_type:
-		if instn[0] in instn_type["A"]:  typeA(instn, machine_code, addr_and_pc)
-		elif instn[0] in instn_type["B"]:  typeB(instn, machine_code, addr_and_pc)
-		elif instn[0] in instn_type["C"]:  typeC(instn, machine_code, addr_and_pc)
-		elif instn[0] in instn_type["D"]:  typeD(instn, machine_code, addr_and_pc)
-		elif instn[0] in instn_type["E"]:  typeE(instn, machine_code, addr_and_pc)
-		else :  typeF(instn, machine_code, addr_and_pc)
+		if instn[0] in instn_type["A"]: 
+			 typeA(instn, machine_code, addr_and_pc)
+		elif instn[0] in instn_type["B"]:
+			  typeB(instn, machine_code, addr_and_pc)
+		elif instn[0] in instn_type["C"]:
+			  typeC(instn, machine_code, addr_and_pc)
+		elif instn[0] in instn_type["D"]: 
+			 typeD(instn, machine_code, addr_and_pc)
+		elif instn[0] in instn_type["E"]:
+			  typeE(instn, machine_code, addr_and_pc)
+		else :
+			  typeF(instn, machine_code, addr_and_pc, hlt_count)
