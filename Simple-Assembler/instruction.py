@@ -8,10 +8,6 @@
 #addr_and_pc[1] -> pc
 
 
-def isRegister(instn):
-	#register validation and return boolean
-	#create register dict
-
 def isMem(instn):
 	#memory validation and return boolean
 
@@ -76,7 +72,13 @@ def typeF(instn, machine_code, addr_and_pc):
 
 def instruction(instn, machine_code, addr_and_pc):
 	#like A -> all type A instructions -> "add", "sub", "mul" etc.
-	instn_type = { A: [instn of A ], B: [instn of B] , so on}
+	index = instn[2].find('$')
+	if index == 0: 
+		instn[0] = "movI"
+	else:
+		instn[0] = "movR"
+
+	instn_type = { 'A': ["add","sub"], 'B': ["movI"], 'C': ["movR"] , so on}
 	for i in instn_type:
 		if instn[0] in instn_type[A]:  typeA(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type[B]:  typeB(instn, machine_code, addr_and_pc)
