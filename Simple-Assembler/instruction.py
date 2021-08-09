@@ -8,13 +8,6 @@
 #addr_and_pc[1] -> pc
 
 
-<<<<<<< HEAD
-# def isRegister(instn):
-# 	#register validation and return boolean
-# 	#create register dict
-
-=======
->>>>>>> 80e8e9c826bf983c89ce77cf6b21521320d74d48
 def isMem(instn):
 	#memory validation and return boolean
 
