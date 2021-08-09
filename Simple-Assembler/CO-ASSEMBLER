@@ -1,0 +1,173 @@
+var = -1
+REGISTERS = [{"R0" : "000"} , {"R1" : "001"}, {"R2" : "010"} , {"R3" : "011"} , {"R4" : "100"} , {"R5" : "101"} , {"R6" : "110"} , {"FLAGS" : "111"}]
+
+def checkkey(R):
+    try : 
+        REGISTERS[R]
+    except KeyError as err : 
+        print("Register Not Found!")
+
+
+def Addition(reg1, reg2, reg3):
+    op = "00000"
+    redundant = "00"
+    print(op + redundant  +  checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+
+def Subtraction(reg1 , reg2 , reg3):
+    op = "00001"
+    redundant = "00"
+    print(op + redundant  +  checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def movimm(reg1, imm):
+    #check the key thingi 
+    op = "00010"
+    #accord to the reg print the R value
+    redundant = "0"
+
+    a = imm[2][1:]
+    a = int(a)
+    binary = bin(a)[2:]
+    c = binary.zfill(8)
+    print(op + redundant + c)
+
+def movreg(reg1 , reg2):
+    op = "00011"
+    #check key thingi
+    redundant = "00000"
+    print(op + redundant  + checkkey(reg1) + checkkey(reg2))
+#do load and store again!!
+
+def load(reg1 , mem_addr):
+    op =  "00100"
+    print(op + checkkey(reg1) + mem_addr )
+
+def store(reg1 , mem_addr):
+    op = "00101"
+    print(op + checkkey(reg1) + mem_addr)
+
+def multiply(reg1 , reg2 , reg3):
+    op ="00110"
+    redundant = "00"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def divide(reg1 ,reg2 ,reg3):
+    op = "00111"
+    redundant="00"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def rightshift(reg1 ,imm):
+    op  ="01000"
+    a = imm[2][1:]
+    a = int(a)
+    binary = bin(a)[2:]
+    c = binary.zfill(8)
+    print(op + checkkey(reg1) + c)
+
+def leftshift(reg1 ,imm):
+    op  ="01000"
+    a = imm[2][1:]
+    a = int(a)
+    binary = bin(a)[2:]
+    c = binary.zfill(8)
+    print(op + checkkey(reg1) + c)
+
+def xor(reg1 , reg2 , reg3):
+    op = "01010"
+    redundant ="00"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def orop(reg1 , reg2 , reg3):
+    op = "01011"
+    redundant ="00"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def andop(reg1 , reg2 , reg3):
+    op = "01011"
+    redundant ="00"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2) + checkkey(reg3))
+
+def invert(reg1 , reg2):
+    op = "01101"
+    redundant = "00000"
+    print(op + redundant + checkkey(reg1) + checkkey(reg2))
+
+def compare(reg1 , reg2):
+    op = "01110"
+    redundant = "00000"
+    #finish the function
+    print("TBF")
+
+def unconjump(mem_addr):
+    op = "01111"
+    redundant = "000"
+    #finish the function
+
+def jumpifless(mem_addr):
+    op = "10000"
+    redundant ="000"
+    #finish the function
+
+def jumpifgreater(mem_addr):
+    op ="10001"
+    redundant = "000"
+    #finish the function
+
+def jumpifeq(mem_addr):
+    op ="10010"
+    redundant ="000"
+    #finish the function
+
+def halt():
+    op = "10011"
+    redundant = "00000000000"
+    print(op +redundant)
+
+
+
+
+while(True):
+    s = list(map(str , input().split()))
+    print(s)
+    if(s[0]=="add"):
+        Addition(s[1] , s[2] , s[3])
+        var+=1
+    elif(s[0] == "sub"):
+        var +=1
+    elif(s[0]== "mov"):
+        if(s[2][0]== "$"):
+            movimm(s[1] , s[2])
+            var+=1
+        else:
+            movreg(s[1], s[2])
+            var+=1
+    elif(s[0]== "mul"):
+        multiply(s[1],s[2],s[3])
+        var+=1
+    elif(s[0]== "div"):
+        divide(s[1],s[2],s[3])
+        var+=1
+    elif(s[0]== "rs"):
+        rightshift(s[1] , s[2] )
+        var+=1
+    elif(s[0]== "ls"):
+        leftshift(s[1], s[2])
+        var+=1
+    elif(s[0] == "xor"):
+        xor(s[1],s[2],s[3])
+        var+=1
+    elif(s[0]== "or"):
+        orop(s[1],s[2],s[3])
+        var+=1
+    elif(s[0]== "and"):
+        andop(s[1],s[2],s[3])
+        var+=1
+    elif(s[0]== "not"):
+        invert(s[1],s[2])
+        var+=1
+    elif(s[0]== "cmp"):
+        #finish this
+        var+=1
+
+
+    
