@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Simple-Assembler/notes.txt
+.gitignore
+Simple-Assembler/prac.py
+Simple-Assembler/funcs.py
