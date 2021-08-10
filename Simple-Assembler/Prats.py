@@ -1,2 +1,2 @@
-ofsjofgnsgndgnlgdg
-sfjsofjsjfslfjslsj
+a = bin(4)
+print(type(a))
