@@ -73,7 +73,7 @@ def main():
 		elif isInstruction(line[0]):
 			if line[0] in ["ld" , "st", "jmp" , "jlp" , "jgt" , "je"]:
 				mem_addr += 1
-				mem_ins[mem_addr] = line
+				mem_ins[mem_addr] = line.copy()
 			else:
 				mem_addr = intruction(line, machine_code, addr_and_pc)
 				if (len(line) == 1) && (line[0] == "hlt"):
