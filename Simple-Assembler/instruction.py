@@ -47,7 +47,7 @@ def get_regAddr(reg1):
 	if(reg1 in regdict):
 		return str(regdict[reg1])
 	else : 
-		print("Error : ")
+		raise Exception("Error : Register Not Found","At Line number")
 
 #---IMPORTANT----
 #Return incremented mem_addr and machine code if respective validations are correct.
@@ -140,12 +140,7 @@ def typeF(instn, machine_code, addr_and_pc):
 				machine_code.append(op+redundant)
 				addr_and_pc[0]+=1
 				
-			else : 
-				print("Error : Too many Halt statements","At line number", addr_and_pc[1])
-		else :
-			print("Error the command isn't halt")
-	else : 
-		print("Error : Too many Arguments","At Line number",addr_and_pc[1])
+			
 
 	#TRUE: call correponding function
 	#FALSE: error
