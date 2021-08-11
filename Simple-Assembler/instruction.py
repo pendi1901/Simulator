@@ -10,7 +10,7 @@
 
 def isMem(instn):
 	#memory validation and return boolean
-	#to be checked.................
+	#condition to be checked.................
 	return instn < 256
 
 def isImm(instn):
@@ -61,40 +61,41 @@ def typeA(instn, machine_code, addr_and_pc):
 		unused = "00"
 		machine_code.append(opcode + unused + rd + rs1 + rs2 )
 		
-	return (addr_and_pc[0] + 1)
+	return addr_and_pc[0] + 1
 		
 
 def typeB(instn, machine_code, addr_and_pc):
-	b = isImm(instn[2][1:])
 	if(len(instn) == 3):
-		if(b == True):
-			a = get_regAddr(instn[1])
-			op = get_opcode(instn[0])
+		if(isImm(instn[2][1:])):
+			rd = get_regAddr(instn[1])
+			opcode = get_opcode(instn[0])
 			i = int(instn[2][1:])
 			binary = bin(i)[2:]
-			c = binary.zfill(8)
-			machine_code.append(op + a + c )
-			addr_and_pc[0]+=1
+			imm = binary.zfill(8)
+			machine_code.append(opcode + rd + imm )
 			
 		else : 
 			raise Exception("Error  : Given Number isn't a 8 bit value","At line number",addr_and_pc[1])
 	else:
 		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1] )
+	
+	return addr_and_pc[0] + 1
 
 	#TRUE: call correponding function
 	#FALSE: error
 
 def typeC(instn, machine_code, addr_and_pc):
-	if(len(instn)==3):
-		a = get_regAddr(instn[1])
-		b = get_regAddr(instn[2])
-		op  =get_opcode(instn[0])
-		redundant = "00000"
-		machine_code.append(op+redundant+a+b)
-		addr_and_pc[0]+=1
+	if(len(instn) == 3):
+		rd = get_regAddr(instn[1])
+		rs = get_regAddr(instn[2])
+		opcode = get_opcode(instn[0])
+		unused = "00000"
+		machine_code.append(opcode + unused + rd + rs)
 		
 	else:
 		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1])
+	
+	return addr_and_pc[0] + 1
 
 #complete this function
 def typeD(instn, machine_code, addr_and_pc, hlt_count):
