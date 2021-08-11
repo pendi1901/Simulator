@@ -60,7 +60,7 @@ def typeA(instn, machine_code, addr_and_pc):
 	# 	#FALSE: error
 	
 	if(len(instn) != 4):
-		print("Error : Not Enough Arguments","At line number", addr_and_pc[1])
+		raise Exception("Error : Not Enough Arguments","At line number", addr_and_pc[1])
 	else:
 		a = get_regAddr(instn[1])
 		b = get_regAddr(instn[2])
@@ -84,9 +84,9 @@ def typeB(instn, machine_code, addr_and_pc):
 			addr_and_pc[0]+=1
 			
 		else : 
-			print("Error  : Given Number isn't a 8 bit value","At line number",addr_and_pc[1])
+			raise Exception("Error  : Given Number isn't a 8 bit value","At line number",addr_and_pc[1])
 	else:
-		print("Error : Not Enough Arguments","At line number",addr_and_pc[1] )
+		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1] )
 
 	#TRUE: call correponding function
 	#FALSE: error
@@ -101,7 +101,7 @@ def typeC(instn, machine_code, addr_and_pc):
 		addr_and_pc[0]+=1
 		
 	else:
-		print("Error : Not Enough Arguments","At line number",addr_and_pc[1])
+		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1])
 
 #complete this function
 def typeD(instn, machine_code, addr_and_pc, hlt_count):
