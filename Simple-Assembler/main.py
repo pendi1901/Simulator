@@ -76,7 +76,7 @@ def main():
 				mem_ins[mem_addr] = line.copy()
 			else:
 				mem_addr = intruction(line, machine_code, addr_and_pc)
-				if (len(line) == 1) && (line[0] == "hlt"):
+				if (len(line) == 1) and (line[0] == "hlt"):
 					hlt_count += 1
 			#<<check here for multiple hlts>> and display error
 

@@ -31,7 +31,7 @@ def get_opcode(command):
 	return str(opcode[command])
 
 #the exception here is left 
-def get_regAddr(reg1):
+def get_regAddr(reg1, line_no):
 	#create reg dict, format -> {reg: reg_Addr}
 	#return corresponding reg addr
 	regdict = {"R0" : "000" , "R1" : "001" , "R2" : "010" , "R3" : "011" ,
@@ -39,7 +39,7 @@ def get_regAddr(reg1):
 	if(reg1 in regdict):
 		return str(regdict[reg1])
 	else : 
-		raise Exception("Error : Register Not Found","At Line number")
+		raise Exception("Error : Register Not Found","At Line number: ", line_no)
 
 #---IMPORTANT----
 #Return incremented mem_addr and machine code if respective validations are correct.
@@ -51,23 +51,23 @@ def typeA(instn, machine_code, addr_and_pc):
 	# 	machine_code.append(op+redudant + )
 	# 	#FALSE: error
 	
-	if(len(instn) != 4):
-		raise Exception("Error : Not Enough Arguments","At line number", addr_and_pc[1])
-	else:
-		rd = get_regAddr(instn[1])
-		rs1 = get_regAddr(instn[2])
-		rs2 = get_regAddr(instn[3])
+	if(len(instn) == 4):
+		rd = get_regAddr(instn[1], addr_and_pc[1])
+		rs1 = get_regAddr(instn[2], addr_and_pc[1])
+		rs2 = get_regAddr(instn[3], addr_and_pc[1])
 		opcode = get_opcode(instn[0])
 		unused = "00"
 		machine_code.append(opcode + unused + rd + rs1 + rs2 )
+	else:
+		raise Exception("Error : Not Enough Arguments","At line number", addr_and_pc[1])
 		
-	return addr_and_pc[0] + 1
+	return addr_and_pc[0] + 1, machine_code
 		
 
 def typeB(instn, machine_code, addr_and_pc):
 	if(len(instn) == 3):
 		if(isImm(instn[2][1:])):
-			rd = get_regAddr(instn[1])
+			rd = get_regAddr(instn[1], addr_and_pc[1])
 			opcode = get_opcode(instn[0])
 			i = int(instn[2][1:])
 			binary = bin(i)[2:]
@@ -79,15 +79,15 @@ def typeB(instn, machine_code, addr_and_pc):
 	else:
 		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1] )
 	
-	return addr_and_pc[0] + 1
+	return addr_and_pc[0] + 1, machine_code
 
 	#TRUE: call correponding function
 	#FALSE: error
 
 def typeC(instn, machine_code, addr_and_pc):
 	if(len(instn) == 3):
-		rd = get_regAddr(instn[1])
-		rs = get_regAddr(instn[2])
+		rd = get_regAddr(instn[1], addr_and_pc[1])
+		rs = get_regAddr(instn[2], addr_and_pc[1])
 		opcode = get_opcode(instn[0])
 		unused = "00000"
 		machine_code.append(opcode + unused + rd + rs)
@@ -95,12 +95,12 @@ def typeC(instn, machine_code, addr_and_pc):
 	else:
 		raise Exception("Error : Not Enough Arguments","At line number",addr_and_pc[1])
 	
-	return addr_and_pc[0] + 1
+	return addr_and_pc[0] + 1, machine_code
 
 #complete this function
 def typeD(instn, machine_code, addr_and_pc, hlt_count):
 	if (len(instn) ==3):
-		a = get_regAddr(instn[1])
+		a = get_regAddr(instn[1], addr_and_pc[1])
 		op = get_opcode(instn[0])
 
 		#TRUE: call correponding function
@@ -131,11 +131,10 @@ def typeF(instn, machine_code, addr_and_pc):
 		opcode =get_opcode(instn[0])
 		unused = "00000000000"
 		machine_code.append(opcode + unused)
-	
 	else:	
 		raise #Incorrect no of parameters given or Synatx error
 			
-	return addr_and_pc[0] + 1
+	return addr_and_pc[0] + 1, machine_code
 				
 			
 
@@ -160,14 +159,16 @@ def instruction(instn, machine_code, addr_and_pc):
 				 }
 	for i in instn_type:
 		if instn[0] in instn_type["A"]: 
-			 typeA(instn, machine_code, addr_and_pc)
+			mem_addr = typeA(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["B"]:
-			  typeB(instn, machine_code, addr_and_pc)
+			mem_addr = typeB(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["C"]:
-			  typeC(instn, machine_code, addr_and_pc)
+			mem_addr = typeC(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["D"]: 
-			 typeD(instn, machine_code, addr_and_pc)
+			mem_addr = typeD(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["E"]:
-			  typeE(instn, machine_code, addr_and_pc)
-		else :
-			  typeF(instn, machine_code, addr_and_pc)
+			mem_addr = typeE(instn, machine_code, addr_and_pc)
+		else:
+			mem_addr = typeF(instn, machine_code, addr_and_pc)
+	return mem_addr, machine_code
+		
