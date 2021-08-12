@@ -127,6 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+
 Simple-Assembler/notes.txt
 .gitignore
 Simple-Assembler/prac.py
@@ -141,3 +144,5 @@ automatedTesting/tests/assembly/.DS_Store
 .gitignore
 automatedTesting/.DS_Store
 .DS_Store
+Simple-Assembler/gistfile1.sh
+Assignment.pdf
