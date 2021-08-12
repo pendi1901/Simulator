@@ -27,7 +27,7 @@ def isBlankLine(line):
 
 
 def main():
-	prog_cnter = 0
+	prog_cnter = 1
 	mem_addr = -1
 	hlt_count= 0
 	opcode = ["add", "sub", "mov", "ld", "st", "mul", "div",
@@ -38,11 +38,49 @@ def main():
 	storeVar = {}
 	machine_code = []
 	storereg = ["R0", "R1", "R2", "R3", "R4", "R5", "R6", "FLAGS"]
-	mem_ins = {}
+	#mem_ins = {}
 
 	#add a case for the movI and the movR as well otherwise they'll
 	#come under errors 
 	#f = read_from_file()
+	for each in stdin:
+		line = each[:-1].strip().split()
+
+		if isBlankLine(line):
+			prog_cnter = prog_cnter + 1
+			continue
+
+		elif hlt_count == 1:
+			raise Exception(prog_cnter - 1, "halt not the last instruction")
+
+		elif line[0][-1] == ":":
+			labelVar.label(line, storeLabel, storereg, storeVar, opcode, addr_and_pc)
+			mem_addr = addr_and_pc[0]
+			if len(line) == 2:
+				if line[1] == "hlt":
+					hlt_count = 1
+		elif line[0] == "var":
+			if len(line) != 2:
+				raise Exception("syntax")
+			if mem_addr != -1:
+				raise Exception("variable dec in between")
+			labelVar.variable(line, storeVar, storereg, opcode)
+		elif line[0] == "hlt":
+			if len(line) == 1:
+				hlt_count = 1
+				mem_addr += 1
+		else:
+			mem_addr += 1
+		prog_cnter += 1
+
+	for v in storeVar.keys():
+		mem_addr += 1
+		memad = bin(mem_addr)[2:].zfill(8)
+		storeVar[v] = memad
+
+	prog_cnter = 1
+	mem_addr = -1
+
 	for each in stdin:
 		line = each[:-1].strip().split()
 
@@ -58,28 +96,16 @@ def main():
 			if len(line) == 1:
 				continue
 			if isInstruction(line[1:]):
-				mem_addr = instruction(line, machine_code, addr_and_pc)
+				instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
 			else:
 				raise Exception("Wrong instruction")
 
 		elif line[0] == "var":
-			if len(line) != 2:
-				raise Exception("syntax")
-			if mem_addr != -1:
-				raise Exception("variable dec in between")
-			labelVar.variable(line, storeVar, storereg, opcode)
 			prog_cnter += 1
+			continue
 
 		elif isInstruction(line[0]):
-			if line[0] in ["ld" , "st", "jmp" , "jlp" , "jgt" , "je"]:
-				mem_addr += 1
-				mem_ins[mem_addr] = line.copy()
-			else:
-				mem_addr = intruction(line, machine_code, addr_and_pc)
-				if (len(line) == 1) && (line[0] == "hlt"):
-					hlt_count += 1
-			#<<check here for multiple hlts>> and display error
-
+			instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
 		else:
 			# error(general error perhaps) statement
 		    raise Exception("General Error")
@@ -87,12 +113,9 @@ def main():
 	if hlt_count == 0:
 		raise Exception("Halt statement missing")
 	# <<modify var dict (add mem_addr after hlt instruction)>>
-	for v in storeVar.keys():
-		mem_addr += 1
-		memad = bin(mem_addr)[2:].zfill(8)
-		storeVar[v] = memad
-	for z in mem_ins.keys():
-		intruction(mem_ins[z], machine_code, z, storeVar, storeLabel)
+
+	#for z in mem_ins.keys():
+		#intruction(mem_ins[z], machine_code, z, storeVar, storeLabel)
 	#displaying final result
 	for result in machine_code:
 		print(result)

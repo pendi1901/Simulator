@@ -104,7 +104,7 @@ def typeC(instn, machine_code, addr_and_pc):
 		print("Error : Not Enough Arguments","At line number",addr_and_pc[1])
 
 #complete this function
-def typeD(instn, machine_code, addr_and_pc, hlt_count):
+def typeD(instn, machine_code, addr_and_pc, vars):
 	if (len(instn) ==3):
 		a = get_regAddr(instn[1])
 		op = get_opcode(instn[0])
@@ -113,7 +113,7 @@ def typeD(instn, machine_code, addr_and_pc, hlt_count):
 		#FALSE: error
 
 #complete this function
-def typeE(instn, machine_code, addr_and_pc):
+def typeE(instn, machine_code, addr_and_pc,  label):
 	if(len(instn)==3):
 		op = get_opcode(instn[0])
 		redundant = "000"
@@ -150,7 +150,7 @@ def typeF(instn, machine_code, addr_and_pc):
 	#TRUE: call correponding function
 	#FALSE: error
 
-def instruction(instn, machine_code, addr_and_pc):
+def itr(instn, machine_code, addr_and_pc, label, var):
 	#like A -> all type A instructions -> "add", "sub", "mul" etc.
 	index = instn[2].find('$')
 	if(index == 0):
@@ -168,8 +168,8 @@ def instruction(instn, machine_code, addr_and_pc):
 		elif instn[0] in instn_type["C"]:
 			  typeC(instn, machine_code, addr_and_pc)
 		elif instn[0] in instn_type["D"]: 
-			 typeD(instn, machine_code, addr_and_pc)
+			 typeD(instn, machine_code, addr_and_pc, var)
 		elif instn[0] in instn_type["E"]:
-			  typeE(instn, machine_code, addr_and_pc)
+			  typeE(instn, machine_code, addr_and_pc, label)
 		else :
 			  typeF(instn, machine_code, addr_and_pc)
