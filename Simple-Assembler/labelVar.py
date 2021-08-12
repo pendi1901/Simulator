@@ -19,7 +19,6 @@ def isLabel(instn, labels, reg, var, opc):
 def label(instn, labels, reg, var, opc, addr):
 	if isLabel(instn, labels, reg, var, opc):
 		addr[0] += 1
-		addr[1] += 1
 		a = bin(addr[0])[2:].zfill(8)
 		labels[instn[0][:-1]] = a
 	else:
@@ -47,7 +46,7 @@ def isVar(instn, var, reg, opcode):
 
 
 def variable(instn, var, reg, opcode):
-	if isVar(instn, var, reg, opcode)
+	if isVar(instn, var, reg, opcode):
 		#TRUE: append to variable dict 	(format -> var: addr)
 	    var[instn[1]] = "00000000"
 	else:

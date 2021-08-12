@@ -13,17 +13,11 @@ def isInstruction(instn):
 	opcode = ["add", "sub", "mov","ld", "st", "mul", "div",
 	"rs","ls","xor" ,"or" ,"and", "not","cmp", "jmp", "jlt", "jgt", "je"
 	, "hlt"]
-	if instn[0] in opcode:
-		return True
-	else:
-		False
+	return instn[0] in opcode
 
 def isBlankLine(line):
-	#check for blank line and return boolean
-    if line == '':
-		return True
-	else:
-		return False
+
+	return line == ""
 
 
 def main():
@@ -56,9 +50,15 @@ def main():
 		elif line[0][-1] == ":":
 			labelVar.label(line, storeLabel, storereg, storeVar, opcode, addr_and_pc)
 			mem_addr = addr_and_pc[0]
-			if len(line) == 2:
-				if line[1] == "hlt":
+			if len(line) == 1:
+				prog_cnter += 1
+				mem_addr -= 1
+				continue
+			if line[1] == 'hlt':
+				if len(line) == 2:
 					hlt_count = 1
+				else:
+					raise Exception("Syntax Error at line number", prog_cnter)
 		elif line[0] == "var":
 			if len(line) != 2:
 				raise Exception("syntax")
@@ -69,9 +69,13 @@ def main():
 			if len(line) == 1:
 				hlt_count = 1
 				mem_addr += 1
+			else:
+				raise Exception("Syntax Error at line number", prog_cnter)
 		else:
 			mem_addr += 1
 		prog_cnter += 1
+	if hlt_count == 0:
+		raise Exception("Halt statement missing")
 
 	for v in storeVar.keys():
 		mem_addr += 1
@@ -80,6 +84,7 @@ def main():
 
 	prog_cnter = 1
 	mem_addr = -1
+	hlt_count = 0
 
 	for each in stdin:
 		line = each[:-1].strip().split()
@@ -92,11 +97,13 @@ def main():
 			raise Exception("halt not the last instruction")
 
 		elif line[0][-1] == ":":
-			labelVar.label(line, storeLabel, storereg, storeVar, opcode, addr_and_pc)
 			if len(line) == 1:
+				prog_cnter += 1
 				continue
 			if isInstruction(line[1:]):
 				instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
+				mem_addr = addr_and_pc[0]
+				hlt_count = addr_and_pc[2]
 			else:
 				raise Exception("Wrong instruction")
 
@@ -106,12 +113,13 @@ def main():
 
 		elif isInstruction(line[0]):
 			instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
+			mem_addr = addr_and_pc[0]
+			hlt_count = addr_and_pc[2]
 		else:
 			# error(general error perhaps) statement
 		    raise Exception("General Error")
 		prog_cnter += 1
-	if hlt_count == 0:
-		raise Exception("Halt statement missing")
+
 	# <<modify var dict (add mem_addr after hlt instruction)>>
 
 	#for z in mem_ins.keys():
