@@ -135,13 +135,10 @@ Simple-Assembler/notes.txt
 Simple-Assembler/prac.py
 Simple-Assembler/funcs.py
 Simple-Assembler/instruction.py
-.gitignore
 automatedTesting/tests/bin/.DS_Store
 automatedTesting/tests/traces/.DS_Store
 automatedTesting/tests/.DS_Store
 automatedTesting/tests/assembly/.DS_Store
-.gitignore
-.gitignore
 automatedTesting/.DS_Store
 .DS_Store
 Simple-Assembler/gistfile1.sh

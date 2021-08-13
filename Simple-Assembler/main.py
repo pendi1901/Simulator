@@ -42,56 +42,56 @@ def main():
 		line = each.strip().split()
 
 		if isBlankLine(line):
-			prog_cnter = prog_cnter + 1
+			addr_and_pc[1] = addr_and_pc[1] + 1
 			continue
 
 		input_list.append(line)
-		if hlt_count == 1:
-			raise Exception(prog_cnter - 1, "halt not the last instruction")
+		if addr_and_pc[2] == 1:
+			raise Exception(addr_and_pc[1] - 1, "halt not the last instruction")
 
 		elif line[0][-1] == ":":
 			labelVar.label(line, storeLabel, storereg, storeVar, opcode, addr_and_pc)
-			mem_addr = addr_and_pc[0]
+			addr_and_pc[0] = addr_and_pc[0]
 			if len(line) == 1:
-				prog_cnter += 1
-				mem_addr -= 1
+				addr_and_pc[1] += 1
+				addr_and_pc[0] -= 1
 				continue
 			if line[1] == 'hlt':
 				if len(line) == 2:
-					hlt_count = 1
+					addr_and_pc[2] = 1
 				else:
-					raise Exception("Syntax Error at line number", prog_cnter)
+					raise Exception("Syntax Error at line number", addr_and_pc[1])
 
 		elif line[0] == "var":
 			if len(line) != 2:
 				raise Exception("syntax")
-			if mem_addr != -1:
+			if addr_and_pc[0] != -1:
 				raise Exception("variable dec in between")
 			labelVar.variable(line, storeVar, storereg, opcode)
 
 		elif line[0] == "hlt":
 			if len(line) == 1:
-				hlt_count = 1
+				addr_and_pc[2] = 1
 				# addr_and_pc[0] += 1
-				mem_addr += 1
+				addr_and_pc[0] += 1
 			else:
-				raise Exception("Syntax Error at line number", prog_cnter)
+				raise Exception("Syntax Error at line number", addr_and_pc[1])
 		
 		else:
-			mem_addr += 1
+			addr_and_pc[0] += 1
 			# addr_and_pc[0] += 1 
-		prog_cnter += 1
-	if hlt_count == 0:
+		addr_and_pc[1] += 1
+	if addr_and_pc[2] == 0:
 		raise Exception("Halt statement missing")
 
 	for v in storeVar.keys():
-		mem_addr += 1
-		memad = bin(mem_addr)[2:].zfill(8)
+		addr_and_pc[0] += 1
+		memad = bin(addr_and_pc[0])[2:].zfill(8)
 		storeVar[v] = memad
 
-	prog_cnter = 1
-	mem_addr = -1
-	# hlt_count = 0
+	addr_and_pc[1] = 1
+	addr_and_pc[0] = -1
+	# addr_and_pc[2] = 0
 
 	# for each in input_list:
 	for line in input_list:
@@ -101,45 +101,45 @@ def main():
 
 		# # if isBlankLine(line):
 		# if each == "\n":
-		# 	prog_cnter = prog_cnter + 1
+		# 	addr_and_pc[1] = addr_and_pc[1] + 1
 		# 	continue
 
 		# line = each.strip().split()
 	 	# if isBlankLine(line):
 		# if isBlankLine(line):
-		# 	prog_cnter = prog_cnter + 1
+		# 	addr_and_pc[1] = addr_and_pc[1] + 1
 		# 	continue
 		# print(line)
 
 
-		# if hlt_count == 1:
+		# if addr_and_pc[2] == 1:
 		# 	raise Exception("halt not the last instruction")
 
 		if line[0][-1] == ":":
 			if len(line) == 1:
-				prog_cnter += 1
+				addr_and_pc[1] += 1
 				continue
 			if isInstruction(line[1]):
 				instruction.itr(line[1:], machine_code, addr_and_pc, storeLabel, storeVar)
-				mem_addr = addr_and_pc[0]
-				hlt_count = addr_and_pc[2]
+				addr_and_pc[0] = addr_and_pc[0]
+				addr_and_pc[2] = addr_and_pc[2]
 			else:
 				raise Exception("Wrong instruction")
 
 		elif line[0] == "var":
-			prog_cnter += 1
+			addr_and_pc[1] += 1
 			continue
 
 		elif isInstruction(line[0]):
 			instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
-			mem_addr = addr_and_pc[0]
-			hlt_count = addr_and_pc[2]
+			addr_and_pc[0] = addr_and_pc[0]
+			addr_and_pc[2] = addr_and_pc[2]
 		else:
 			# error(general error perhaps) statement
 		    raise Exception("General Error")
-		prog_cnter += 1
+		addr_and_pc[1] += 1
 
-	# <<modify var dict (add mem_addr after hlt instruction)>>
+	# <<modify var dict (add addr_and_pc[0] after hlt instruction)>>
 
 	#for z in mem_ins.keys():
 		#intruction(mem_ins[z], machine_code, z, storeVar, storeLabel)
