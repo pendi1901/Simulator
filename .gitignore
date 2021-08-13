@@ -149,3 +149,7 @@ Assignment.pdf
 Simple-Assembler/test1
 Simple-Assembler/test1out
 Simple-Assembler/test1out.txt
+.vscode/launch.json
+Simple-Assembler/out.txt
+.gitignore
+Simple-Assembler/test2

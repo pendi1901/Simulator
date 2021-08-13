@@ -13,7 +13,7 @@ def isInstruction(instn):
 	opcode = ["add", "sub", "mov","ld", "st", "mul", "div",
 	"rs","ls","xor" ,"or" ,"and", "not","cmp", "jmp", "jlt", "jgt", "je"
 	, "hlt"]
-	return instn[0] in opcode
+	return instn in opcode
 
 def isBlankLine(line):
 
@@ -30,21 +30,23 @@ def main():
 	addr_and_pc = [ mem_addr, prog_cnter, hlt_count]
 	storeLabel = {}
 	storeVar = {}
+	input_list = []
 	machine_code = []
 	storereg = ["R0", "R1", "R2", "R3", "R4", "R5", "R6", "FLAGS"]
-	#mem_ins = {}
+	mem_ins = {}
 
-	#add a case for the movI and the movR as well otherwise they'll
-	#come under errors 
-	#f = read_from_file()
+	# add a case for the movI and the movR as well otherwise they'll
+	# come under errors 
+	# f = read_from_file()
 	for each in stdin:
-		line = each[:-1].strip().split()
+		line = each.strip().split()
 
 		if isBlankLine(line):
 			prog_cnter = prog_cnter + 1
 			continue
 
-		elif hlt_count == 1:
+		input_list.append(line)
+		if hlt_count == 1:
 			raise Exception(prog_cnter - 1, "halt not the last instruction")
 
 		elif line[0][-1] == ":":
@@ -59,20 +61,25 @@ def main():
 					hlt_count = 1
 				else:
 					raise Exception("Syntax Error at line number", prog_cnter)
+
 		elif line[0] == "var":
 			if len(line) != 2:
 				raise Exception("syntax")
 			if mem_addr != -1:
 				raise Exception("variable dec in between")
 			labelVar.variable(line, storeVar, storereg, opcode)
+
 		elif line[0] == "hlt":
 			if len(line) == 1:
 				hlt_count = 1
+				# addr_and_pc[0] += 1
 				mem_addr += 1
 			else:
 				raise Exception("Syntax Error at line number", prog_cnter)
+		
 		else:
 			mem_addr += 1
+			# addr_and_pc[0] += 1 
 		prog_cnter += 1
 	if hlt_count == 0:
 		raise Exception("Halt statement missing")
@@ -84,24 +91,36 @@ def main():
 
 	prog_cnter = 1
 	mem_addr = -1
-	hlt_count = 0
+	# hlt_count = 0
 
-	for each in stdin:
-		line = each[:-1].strip().split()
+	# for each in input_list:
+	for line in input_list:
+	# for each in stdin:
+		# # line = each.strip().split()
+		# # print(each)
 
-		if isBlankLine(line):
-			prog_cnter = prog_cnter + 1
-			continue
+		# # if isBlankLine(line):
+		# if each == "\n":
+		# 	prog_cnter = prog_cnter + 1
+		# 	continue
 
-		elif hlt_count == 1:
-			raise Exception("halt not the last instruction")
+		# line = each.strip().split()
+	 	# if isBlankLine(line):
+		# if isBlankLine(line):
+		# 	prog_cnter = prog_cnter + 1
+		# 	continue
+		# print(line)
 
-		elif line[0][-1] == ":":
+
+		# if hlt_count == 1:
+		# 	raise Exception("halt not the last instruction")
+
+		if line[0][-1] == ":":
 			if len(line) == 1:
 				prog_cnter += 1
 				continue
-			if isInstruction(line[1:]):
-				instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
+			if isInstruction(line[1]):
+				instruction.itr(line[1:], machine_code, addr_and_pc, storeLabel, storeVar)
 				mem_addr = addr_and_pc[0]
 				hlt_count = addr_and_pc[2]
 			else:
