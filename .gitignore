@@ -146,3 +146,7 @@ automatedTesting/.DS_Store
 .DS_Store
 Simple-Assembler/gistfile1.sh
 Assignment.pdf
+.vscode/launch.json
+Simple-Assembler/out.txt
+.gitignore
+Simple-Assembler/test2
