@@ -61,14 +61,14 @@ def main():
 					hlt_count = 1
 				else:
 					raise Exception("Syntax Error at line number", prog_cnter)
-
+		
 		elif line[0] == "var":
 			if len(line) != 2:
 				raise Exception("syntax")
 			if mem_addr != -1:
 				raise Exception("variable dec in between")
 			labelVar.variable(line, storeVar, storereg, opcode)
-
+		
 		elif line[0] == "hlt":
 			if len(line) == 1:
 				hlt_count = 1
@@ -79,7 +79,7 @@ def main():
 		
 		else:
 			mem_addr += 1
-			# addr_and_pc[0] += 1 
+			# addr_and_pc[0] += 1
 		prog_cnter += 1
 	if hlt_count == 0:
 		raise Exception("Halt statement missing")
@@ -105,13 +105,13 @@ def main():
 		# 	continue
 
 		# line = each.strip().split()
-	 	# if isBlankLine(line):
+		# if isBlankLine(line):
 		# if isBlankLine(line):
 		# 	prog_cnter = prog_cnter + 1
 		# 	continue
 		# print(line)
 
-
+		
 		# if hlt_count == 1:
 		# 	raise Exception("halt not the last instruction")
 
