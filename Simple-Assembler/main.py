@@ -51,7 +51,6 @@ def main():
 
 		elif line[0][-1] == ":":
 			labelVar.label(line, storeLabel, storereg, storeVar, opcode, addr_and_pc)
-			addr_and_pc[0] = addr_and_pc[0]
 			if len(line) == 1:
 				addr_and_pc[1] += 1
 				addr_and_pc[0] -= 1
@@ -68,7 +67,7 @@ def main():
 			if addr_and_pc[0] != -1:
 				raise Exception("variable dec in between")
 			labelVar.variable(line, storeVar, storereg, opcode)
-
+		
 		elif line[0] == "hlt":
 			if len(line) == 1:
 				addr_and_pc[2] = 1
@@ -105,7 +104,7 @@ def main():
 		# 	continue
 
 		# line = each.strip().split()
-	 	# if isBlankLine(line):
+		# if isBlankLine(line):
 		# if isBlankLine(line):
 		# 	addr_and_pc[1] = addr_and_pc[1] + 1
 		# 	continue
@@ -121,8 +120,8 @@ def main():
 				continue
 			if isInstruction(line[1]):
 				instruction.itr(line[1:], machine_code, addr_and_pc, storeLabel, storeVar)
-				addr_and_pc[0] = addr_and_pc[0]
-				addr_and_pc[2] = addr_and_pc[2]
+				# addr_and_pc[0] = addr_and_pc[0]
+				# addr_and_pc[2] = addr_and_pc[2]
 			else:
 				raise Exception("Wrong instruction")
 
@@ -132,8 +131,8 @@ def main():
 
 		elif isInstruction(line[0]):
 			instruction.itr(line, machine_code, addr_and_pc, storeLabel, storeVar)
-			addr_and_pc[0] = addr_and_pc[0]
-			addr_and_pc[2] = addr_and_pc[2]
+			# addr_and_pc[0] = addr_and_pc[0]
+			# addr_and_pc[2] = addr_and_pc[2]
 		else:
 			# error(general error perhaps) statement
 		    raise Exception("General Error")
