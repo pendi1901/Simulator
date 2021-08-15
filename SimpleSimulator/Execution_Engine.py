@@ -83,15 +83,19 @@ def movI(instn, pch, reg):
     pch[0] += 1
 
 def movR(instn, pch, reg):
-    reg["111"] = "0000"
     r1 = instn[-6:-3]
     r2 = instn[-3:]
-    reg[r1] = reg[r2]
+    if r2 == "111":
+        reg[r1] = int(reg[r2], 2)
+    else:
+        reg[r1] = reg[r2]
     pch[0] += 1
+    reg["111"] = "0000"
 
 def load(instn, pch, reg, var):
     reg["111"] = "0000"
     vr = instn[-8:]
+    vr = int(vr, 2)
     r1 = instn[-11:-8]
     if vr not in var.keys():
         var[vr] = 0
@@ -102,7 +106,7 @@ def store(instn, pch, reg, var):
     reg["111"] = "0000"
     vr = instn[-8:]
     r1 = instn[-11:-8]
-    var[vr] = reg[r1]
+    var[int(vr, 2)] = reg[r1]
     pch[0] += 1
 
 def mul(instn, pch, reg):
